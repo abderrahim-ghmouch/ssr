@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Application Rendering - Luxury Raja</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE RESET & SETUP */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #022c22;
+            background-image: radial-gradient(circle at 50% 0%, #064e3b 0%, #022c22 80%);
+            display: grid;
+            gap: 40px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px 0;
+            place-items: center;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 18px;
+        }
+
+        /* MAIN SLIDE CONTAINER - LUXURY RAJA THEME */
+        .slide-container {
+            align-items: center;
+            background-color: #efe9d8; /* Assombri: de #faf9f6 vers #efe9d8 */
+            border-radius: 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Lato', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+            width: 1280px;
+            border: 1px solid #d4af37; /* Gold */
+            border-top: 8px solid #064e3b; /* Deep Emerald */
+        }
+
+        /* Elegant background watermark/accent */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* THEMATIC GRAPHICS */
+        .thematic-image {
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+            border: 1px solid #d4af37;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-size: 160px;
+            border-radius: 0;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+        }
+        .thematic-image.small {
+            font-size: 80px;
+        }
+
+        /* TYPOGRAPHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #064e3b;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle,
+        .slide-container th,
+        .slide-container td {
+            color: #334155;
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+        }
+
+        .slide-container h1 { font-size: 68px; line-height: 1.2; color: #022c22; }
+        .slide-container .slide-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+            color: #022c22;
+            border-bottom: 1px solid #d4af37;
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .slide-container h3 { font-size: 28px; font-weight: 700; margin-bottom: 18px; color: #064e3b; }
+        
+        .slide-container p,
+        .slide-container li,
+        .slide-container th,
+        .slide-container td { font-size: 20px; line-height: 1.7; color: #1e293b; }
+        
+        .slide-container .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            margin: 25px auto;
+            color: #475569;
+            font-style: italic;
+        }
+
+        .slide-container .content-area {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* LAYOUTS */
+        .title-layout {
+            text-align: center;
+            max-width: 1000px;
+        }
+
+        /* Agenda / Sommaire */
+        .agenda-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 80%;
+        }
+        .agenda-list li {
+            font-size: 26px;
+            font-weight: 400;
+            color: #022c22;
+            padding: 20px 30px;
+            margin-bottom: 15px;
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-left: 5px solid #d4af37;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(2, 44, 34, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .agenda-list li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+        }
+        .agenda-list li span {
+            color: #d4af37;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 32px;
+            margin-right: 25px;
+        }
+
+        .two-column {
+            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            width: 100%;
+        }
+
+        .two-column.tiled {
+            align-items: stretch;
+            height: 100%;
+            padding-bottom: 20px;
+        }
+        .two-column.tiled > div {
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border-radius: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid #d4af37;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(2, 44, 34, 0.06);
+        }
+
+        .image-wrapper {
+            border-radius: 0;
+            height: 420px;
+            max-width: 100%;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(2, 44, 34, 0.15);
+        }
+        .image-right-layout .image-wrapper {
+            height: 420px;
+        }
+
+        .image-right-layout ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .image-right-layout li {
+            margin-bottom: 24px;
+            padding-left: 35px;
+            position: relative;
+        }
+        .image-right-layout li::before {
+            content: '\f0da'; /* elegant thin arrow */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #d4af37;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 20px;
+        }
+
+        .slide-container.bleed-image-layout {
+            align-items: start;
+            display: grid;
+            gap: 50px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+        }
+        .slide-container.bleed-image-layout > .content-container {
+            padding: 60px 0 60px 60px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .slide-container.bleed-image-layout > .image-container {
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+            border-left: 1px solid #d4af37;
+        }
+        .bleed-text-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .tiled-content {
+            align-items: stretch;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            width: 100%;
+        }
+        .tile {
+            align-items: flex-start;
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border-radius: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-top: 5px solid #064e3b;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 40px 30px;
+            text-align: left;
+            box-shadow: 0 15px 35px rgba(2, 44, 34, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .tile:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+        }
+        .tile .icon {
+            color: #d4af37;
+            font-size: 34px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0;
+            border: 1px solid #d4af37;
+            box-shadow: 0 8px 15px rgba(6, 78, 59, 0.3);
+        }
+
+        .image-tile {
+            flex: 1;
+            text-align: left;
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border-radius: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(2, 44, 34, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .image-tile:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+        }
+        .image-tile .image-wrapper {
+            height: 220px;
+            border-radius: 0;
+            border-bottom: 2px solid #d4af37;
+            box-shadow: none;
+        }
+        .image-tile .text-content {
+            padding: 30px;
+        }
+
+        .bullet-list {
+            max-width: 1050px;
+            width: 100%;
+        }
+        .bullet-list ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .bullet-list li {
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-left: 6px solid #d4af37;
+            border-radius: 0;
+            margin-bottom: 24px;
+            padding: 25px 30px 25px 90px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(2, 44, 34, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bullet-list li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.12);
+        }
+        .bullet-list i {
+            color: #064e3b; 
+            font-size: 28px;
+            left: 30px;
+            margin-top: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .bullet-list li strong {
+            color: #022c22;
+            display: block;
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .timeline-layout {
+            align-items: stretch;
+            display: flex;
+            height: stretch;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+        }
+        .timeline-layout .timeline-line {
+            background-color: #d4af37;
+            height: 2px;
+            left: 0;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-1px);
+            width: 100%;
+            z-index: 0;
+        }
+        .timeline-item {
+            position: relative;
+            text-align: center;
+            width: 23%;
+        }
+        .timeline-item::after {
+            background-color: #064e3b;
+            border-radius: 50%;
+            border: 3px solid #d4af37;
+            content: '';
+            height: 20px;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        .timeline-item .content-wrapper {
+            left: 0;
+            position: absolute;
+            width: 100%;
+            padding: 25px;
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid #064e3b;
+            border-radius: 0;
+            box-shadow: 0 15px 30px rgba(2, 44, 34, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .timeline-item .content-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+        }
+        .timeline-item:nth-child(odd) .content-wrapper {
+            bottom: 50%;
+            margin-bottom: 35px;
+        }
+        .timeline-item:nth-child(even) .content-wrapper {
+            margin-top: 35px;
+            top: 50%;
+        }
+        .timeline-item h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #064e3b;
+            font-family: 'Playfair Display', serif;
+        }
+        .timeline-item p {
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .table-layout {
+            width: 100%;
+            background: linear-gradient(145deg, #fdfbf7 0%, #efe9d8 100%);
+            border-radius: 0;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(2, 44, 34, 0.08);
+        }
+        .table-layout table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .table-layout th,
+        .table-layout td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 22px 30px;
+            text-align: left;
+        }
+        .table-layout th {
+            background-color: #022c22;
+            color: #d4af37;
+            font-size: 18px;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.05em;
+        }
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+        .table-layout td strong {
+            color: #064e3b;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .qa-layout {
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+            align-self: center;
+        }
+        .qa-layout h2 {
+            font-size: 72px;
+            margin-bottom: 25px;
+            color: #022c22;
+        }
+        .qa-layout p {
+            font-size: 28px;
+            color: #d4af37;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title_Slide -->
+    <div class="slide-container" id="slide1">
+        <div class="title-layout">
+            <h1>Le Rendu des Applications Web</h1>
+            <p class="subtitle">Comprendre le CSR, SSR et les approches hybrides modernes pour des performances optimales</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Agenda (NEW) -->
+    <div class="slide-container" id="slide2">
+        <h2 class="slide-title">1. Sommaire de la présentation</h2>
+        <div class="content-area">
+            <ul class="agenda-list">
+                <li><span>01.</span> Qu'est-ce que le CSR (Client-Side Rendering) ?</li>
+                <li><span>02.</span> Qu'est-ce que le SSR (Server-Side Rendering) ?</li>
+                <li><span>03.</span> Comment fonctionnent ces technologies ?</li>
+                <li><span>04.</span> Avantages et Inconvénients (Limites)</li>
+                <li><span>05.</span> Performance et SEO</li>
+                <li><span>06.</span> Cas d'usage pratiques et Approches Hybrides</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Bleed_Image_Right (What is CSR) -->
+    <div class="slide-container bleed-image-layout" id="slide3">
+        <div class="content-container">
+            <h2 class="slide-title">2. Qu'est-ce que le CSR ?</h2>
+            <div class="content-area">
+                <div class="bleed-text-side">
+                    <h3>Rendu Côté Client (Client-Side Rendering)</h3>
+                    <p>Le rendu côté client (CSR) est une technique moderne de développement web où la responsabilité du rendu de la page est confiée directement au navigateur de l'utilisateur.</p>
+                    <p>Au lieu de recevoir un document HTML complet du serveur, le navigateur reçoit un squelette HTML minimal accompagné d'un volumineux fichier JavaScript.</p>
+                    <p>Une fois téléchargé, le JavaScript s'exécute sur l'appareil, récupérant les données nécessaires via des API et construisant dynamiquement l'interface utilisateur.</p>
+                </div>
+            </div>
+        </div>
+        <div class="image-container">
+            <!-- REPLACED BROKEN IMAGE WITH THEMATIC GRAPHIC -->
+            <div class="thematic-image bleed-image-side">
+                <i class="fa-solid fa-laptop-code"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Image_Right_Text_Left (What is SSR) -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">3. Qu'est-ce que le SSR ?</h2>
+        <div class="content-area">
+            <div class="two-column image-right-layout">
+                <div>
+                    <h3>Rendu Côté Serveur (Server-Side Rendering)</h3>
+                    <p>Le rendu côté serveur (SSR) est la méthode traditionnelle d'affichage du contenu web, récemment modernisée par des frameworks puissants.</p>
+                    <ul>
+                        <li><strong>Génération Complète :</strong> Le serveur génère la structure HTML complète de la page dès la réception d'une requête.</li>
+                        <li><strong>Données Pré-remplies :</strong> Les requêtes en base de données ou API sont traitées sur le serveur.</li>
+                        <li><strong>Prêt à être vu :</strong> Le navigateur reçoit un document complet visible instantanément.</li>
+                        <li><strong>Charge Prévisible :</strong> Déplace le calcul de l'appareil client vers le serveur.</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <!-- REPLACED BROKEN IMAGE WITH THEMATIC GRAPHIC -->
+                        <div class="thematic-image">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Timeline (How CSR Works) -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">4. Comment fonctionne le CSR</h2>
+        <div class="content-area">
+            <div class="timeline-layout">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>1. Requête Initiale</h3>
+                        <p>L'utilisateur navigue vers l'URL. Le serveur retourne une coquille HTML vide et minimale.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>2. Téléchargement</h3>
+                        <p>Le navigateur lit le HTML et commence à télécharger le lourd framework JavaScript.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>3. Exécution</h3>
+                        <p>Le JavaScript est analysé et exécuté sur l'appareil, mettant en place le framework.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>4. Données et Rendu</h3>
+                        <p>Le JS appelle les API, construit dynamiquement le DOM et affiche l'interface utilisateur.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Timeline (How SSR Works) -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">5. Comment fonctionne le SSR</h2>
+        <div class="content-area">
+            <div class="timeline-layout">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>1. Requête Utilisateur</h3>
+                        <p>L'utilisateur navigue vers l'URL. Le navigateur envoie la requête au serveur.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>2. Rendu Serveur</h3>
+                        <p>Le serveur récupère les données et compile tout le document HTML en temps réel.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>3. Envoi au Client</h3>
+                        <p>Le serveur renvoie le HTML pré-rempli. Le navigateur l'affiche instantanément.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="content-wrapper">
+                        <h3>4. Hydratation</h3>
+                        <p>Un fichier JS plus léger est téléchargé et s'attache au HTML statique pour le rendre interactif.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Tiled_Text_With_Icons (Advantages of CSR) -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">6. Avantages du CSR</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h3>Expérience Fluide</h3>
+                    <p>Offre des expériences interactives. Les transitions entre les pages sont instantanées sans nécessiter de rafraîchissement complet du navigateur.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-cloud"></i></div>
+                    <h3>Charge Serveur Réduite</h3>
+                    <p>En déchargeant les calculs sur l'appareil, le serveur ne sert que des fichiers statiques et gère des requêtes API légères.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Navigation Rapide</h3>
+                    <p>Une fois le JavaScript mis en cache, la navigation dans l'application est fulgurante car seules les données brutes sont récupérées.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Tiled_Text_With_Icons (Advantages of SSR) -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">7. Avantages du SSR</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-eye"></i></div>
+                    <h3>Affichage Initial Rapide</h3>
+                    <p>Les utilisateurs voient le contenu beaucoup plus vite car le HTML s'affiche immédiatement, évitant l'écran blanc de chargement.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <h3>SEO Supérieur</h3>
+                    <p>Les moteurs de recherche indexent facilement le HTML rendu. Le contenu est visible pour tous les bots et aperçus sociaux.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-microchip"></i></div>
+                    <h3>Indépendant du Matériel</h3>
+                    <p>Fonctionne mieux sur les anciens téléphones, car il ne nécessite pas un processeur puissant côté client pour générer l'interface.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Styled_Bullet_Points (Limitations of CSR) -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">8. Limites du CSR</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <strong>Chargement Initial Lent</strong>
+                        Les utilisateurs font face à un écran blanc pendant plusieurs secondes sur des réseaux lents pendant l'analyse des mégaoctets de JavaScript.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-robot"></i>
+                        <strong>Défis de Référencement (SEO)</strong>
+                        Beaucoup de moteurs et réseaux sociaux n'exécutent pas le JS, ce qui entraîne l'absence d'aperçus lors des partages.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-battery-quarter"></i>
+                        <strong>Forte Dépendance au Client</strong>
+                        La performance est liée au matériel de l'utilisateur. Les applications complexes vident la batterie rapidement.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Styled_Bullet_Points (Limitations of SSR) -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">9. Limites du SSR</h2>
+        <div class="content-area">
+            <div class="bullet-list">
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-network-wired"></i>
+                        <strong>Requêtes Serveur Fréquentes</strong>
+                        Naviguer vers de nouvelles pages nécessite un aller-retour complet vers le serveur pour récupérer un nouveau document HTML.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-coins"></i>
+                        <strong>Coûts d'Infrastructure Élevés</strong>
+                        Générer du HTML dynamiquement pour chaque requête demande nettement plus de puissance de calcul côté serveur.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <strong>Délai du Premier Octet (TTFB)</strong>
+                        Le serveur ne peut envoyer la réponse tant qu'il n'a pas terminé les requêtes en base de données, causant un léger délai.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Two_Column_Tiled_Text (Performance & SEO) -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">10. Performance & SEO</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Métriques de Performance</h3>
+                    <p><strong>First Contentful Paint (FCP) :</strong> Le SSR gagne. La structure visuelle est visible presque immédiatement.</p>
+                    <p><strong>Time to Interactive (TTI) :</strong> Le CSR brille après le chargement. Le SSR a un TTI retardé pendant "l'hydratation".</p>
+                    <p><strong>Time to First Byte (TTFB) :</strong> Le CSR gagne. Un CDN peut servir la coquille HTML instantanément. Le SSR est plus lent à cause du serveur.</p>
+                </div>
+                <div>
+                    <h3>Le Champ de Bataille du SEO</h3>
+                    <p><strong>Fiabilité des Robots :</strong> Le SSR offre une sortie universellement lisible pour le référencement.</p>
+                    <p><strong>Partage Social :</strong> Les balises Open Graph nécessitent du HTML initial (avantage SSR).</p>
+                    <p><strong>Vitesse d'Indexation :</strong> Google diffère le rendu JS. Le contenu CSR met beaucoup plus de temps à apparaître.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Table (Use Cases) -->
+    <div class="slide-container" id="slide12">
+        <h2 class="slide-title">11. Cas d'Usage : SSR vs CSR</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type d'Application</th>
+                            <th>Approche</th>
+                            <th>Justification Principale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tableaux de Bord Internes</strong></td>
+                            <td>CSR</td>
+                            <td>Le SEO n'importe pas. Profite d'une gestion d'état rapide côté client.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Boutiques E-commerce</strong></td>
+                            <td>SSR</td>
+                            <td>Le SEO est critique. L'affichage rapide évite les rebonds des clients.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Blogs et Actualités</strong></td>
+                            <td>SSR</td>
+                            <td>Le contenu change rapidement et doit être indexé instantanément.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Outils Web Complexes (Figma)</strong></td>
+                            <td>CSR</td>
+                            <td>Agissent comme des applications de bureau. Nécessitent une manipulation intense du DOM.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Tiled_Images (Hybrid Approaches) -->
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">12. Approches Hybrides</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="image-tile">
+                    <div class="image-wrapper">
+                        <!-- THEMATIC GRAPHIC -->
+                        <div class="thematic-image small">
+                            <i class="fa-solid fa-cubes"></i>
+                        </div>
+                    </div>
+                    <div class="text-content">
+                        <h3>Génération Statique (SSG)</h3>
+                        <p>Le HTML est rendu à la compilation. Parfait pour les sites marketing et blogs statiques.</p>
+                    </div>
+                </div>
+                <div class="image-tile">
+                    <div class="image-wrapper">
+                        <!-- THEMATIC GRAPHIC -->
+                        <div class="thematic-image small">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                    </div>
+                    <div class="text-content">
+                        <h3>Génération Incrémentale (ISR)</h3>
+                        <p>Hybride SSG/SSR. Le serveur recompile des pages spécifiques en arrière-plan (données fraîches).</p>
+                    </div>
+                </div>
+                <div class="image-tile">
+                    <div class="image-wrapper">
+                        <!-- THEMATIC GRAPHIC -->
+                        <div class="thematic-image small">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                    </div>
+                    <div class="text-content">
+                        <h3>Architecture en Îlots</h3>
+                        <p>Page servie en HTML statique. Le JS est injecté uniquement dans des composants interactifs isolés.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Q&A -->
+    <div class="slide-container" id="slide14">
+        <div class="qa-layout">
+            <h2>13. Des questions ?</h2>
+            <p>Merci de votre attention.</p>
+        </div>
+    </div>
+
+</body>
+</html>
