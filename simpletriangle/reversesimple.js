@@ -1,17 +1,17 @@
 
-function abdelhadi(num){
+function reverse(num){
 
-    let abdelhadi=""
+    let result=""
     
      for(let i=0;i<=num;i++)
         {
-            for(let j=num;j>i;j--)
+            for(let j=num;j>=i;j--)
                 {
-                    abdelhadi += "*"
+                    result += "*"
                 }
         
-            abdelhadi+="\n"
+            result+="\n"
         }
-return abdelhadi
+return result
     }
-console.log(abdelhadi(6))
+console.log(reverse(6))
